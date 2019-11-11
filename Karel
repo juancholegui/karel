@@ -1,0 +1,131 @@
+# -*- coding: utf-8 -*-
+import turtle   
+import tkinter as tk
+
+#Creacion del tablero usando Turtle
+turtle.setup(2000000,2000000)   
+wn = turtle.Screen()
+wn.bgcolor("white")         
+karel = turtle.Turtle()
+karel.color("blue")
+karel.penup()
+karel.shapesize(3)
+
+turtle.tracer(False) # Dibuja la cuadricula mucho mas rapido
+t = turtle.Turtle() # T es la tortuga constructor
+t.speed(0)
+t.pendown()
+t.hideturtle()
+t.pencolor("black")
+t.pensize(3)
+t.left(180)
+t.penup()
+t.forward(1000)
+t.right(90)
+t.forward(600)
+t.right(90)
+t.pendown()
+turtle.title("Karel"+"= '"+input("Nombre de su programa= ")+"'") 
+
+
+#Configuración ventana1 con tkinter
+
+ventana=tk.Tk()
+ventana.title("Instrucciones")#crea la ventana de instrucciones
+ventana.geometry("1000x1000")#tamaño de la ventana ancho x alto
+
+instructivo=tk.Label(ventana, text="ESTE ES UN COMPILADOR BASICO DE KAREL",bg="snow",fg="black")
+instructivo.pack()
+
+instructivo2=tk.Label(ventana, text="CON EL APRENDERAS LAS FUNCIONES MAS BASICAS DEL MISMO",bg="snow",fg="black")
+instructivo2.pack()
+
+instructivo3=tk.Label(ventana, text="No pongas mas de 10 beepers",bg="snow",fg="black")
+instructivo3.pack()
+
+prueba = tk.Button(ventana, text="Turnleft")
+prueba.pack(side= tk.BOTTOM)
+
+# Dibujar tablero de Karel usando turtle
+
+for i in range(20):   #qué quiero hacer en cada fila
+    for i in range(20):   #qué quiero hacer en cada columna
+        for i in range(4):   #dibujo un cuadrado
+            t.forward(100)  
+            t.right(90)
+        t.forward(100)   #para no empezar otra vez en el mismo punto al terminar una fila, me corro a la derecha en el ancho de 1 cuadradito
+    t.backward(100*20)   #vuelvo 3 cuadraditos para atrás (cada uno mide 50 de ancho) para quedar nuevamente en la primera columna
+    t.right(90)
+    t.forward(100)
+    t.left(90)   #con las últimas 3 líneas me vuelvo a posicionar para empezar a dibujar la siguiente fila
+
+#definicion de las funciones de Karel
+
+#Creacion de los muros    
+def set_environment(a,b,c,d):
+    barrera = turtle.Turtle()
+    barrera.shape("square")
+    barrera.shapesize(a,b)
+    barrera.setpos((c,d))
+    
+#Creación de los beepers
+def set_beepers(x,y):
+    beeper = turtle.Turtle()
+    beeper.shape("square")
+    beeper.color("red")
+    beeper.shapesize(1)
+    beeper.setpos((x,y))
+
+#Función girar a la izquierda
+def turnleft():
+    karel.left(90)
+    
+#Función mover 
+def move():
+    karel.forward(100)
+    
+#Función poner beeper, crea una tortuga
+def putbeeper():
+    new_beeper = turtle.Turtle()
+    new_beeper.shape("square")
+    new_beeper.shapesize(2,2)
+    return new_beeper
+
+beeper = putbeeper()
+
+#Función recoger beeper,oculta la tortuga
+def pickbeeper():
+    beeper.hideturtle()
+
+wn.update()
+turtle.tracer(True)
+
+def Begining_of_Execution():
+    counter = []
+    i = str()
+    while True:
+        tk.Label(ventana, text="Instrucciones").pack()
+        tk.Entry(ventana, justify="center", textvariable=i).pack() #Permite el ingreso de instrucciones a la función
+        if i == "turnoff": #Termina el programa
+            break
+        elif i == "turnleft;":
+            turnleft()
+        elif i == "move;":
+            move()
+        elif i == "putbeeper;":
+            putbeeper()
+        elif i == "pickbeeper;":
+            if karel.pos() == beeper.pos():
+                pickbeeper()
+                counter += 1
+               
+    karel.hideturtle() # borra los beepers
+    print("BYE")
+
+#Inicio de la ejecución
+Begining_of_Execution()
+            
+ventana.mainloop()
+turtle.mainloop()
+turtle.done()
+turtle.bye()
