@@ -5,7 +5,8 @@ import tkinter as tk
 #Creacion del tablero usando Turtle
 turtle.setup(2000000,2000000)   
 wn = turtle.Screen()
-wn.bgcolor("white")         
+wn.bgcolor("white")   
+turtle.title("Karel"+"= '"+input("Nombre de su programa= ")+"'")       
 karel = turtle.Turtle()
 karel.color("blue")
 karel.penup()
@@ -25,7 +26,22 @@ t.right(90)
 t.forward(600)
 t.right(90)
 t.pendown()
-turtle.title("Karel"+"= '"+input("Nombre de su programa= ")+"'") 
+
+
+
+# Dibujar tablero de Karel usando turtle
+
+for i in range(20):   #qué quiero hacer en cada fila
+    for i in range(20):   #qué quiero hacer en cada columna
+        for i in range(4):   #dibujo un cuadrado
+            t.forward(100)  
+            t.right(90)
+        t.forward(100)   #para no empezar otra vez en el mismo punto al terminar una fila, me corro a la derecha en el ancho de 1 cuadricula
+    t.backward(100*20)   #vuelvo 3 cuadraditos para atrás (cada uno mide 50 de ancho) para quedar nuevamente en la primera columna
+    t.right(90)
+    t.forward(100)
+    t.left(90)   #con las últimas 3 líneas me vuelvo a posicionar para empezar a dibujar la siguiente fila
+
 
 
 #Configuración ventana1 con tkinter
@@ -45,20 +61,6 @@ instructivo3.pack()
 
 prueba = tk.Button(ventana, text="Turnleft")
 prueba.pack(side= tk.BOTTOM)
-
-# Dibujar tablero de Karel usando turtle
-
-for i in range(20):   #qué quiero hacer en cada fila
-    for i in range(20):   #qué quiero hacer en cada columna
-        for i in range(4):   #dibujo un cuadrado
-            t.forward(100)  
-            t.right(90)
-        t.forward(100)   #para no empezar otra vez en el mismo punto al terminar una fila, me corro a la derecha en el ancho de 1 cuadradito
-    t.backward(100*20)   #vuelvo 3 cuadraditos para atrás (cada uno mide 50 de ancho) para quedar nuevamente en la primera columna
-    t.right(90)
-    t.forward(100)
-    t.left(90)   #con las últimas 3 líneas me vuelvo a posicionar para empezar a dibujar la siguiente fila
-
 #definicion de las funciones de Karel
 
 #Creacion de los muros    
@@ -91,20 +93,23 @@ def putbeeper():
     new_beeper.shapesize(2,2)
     return new_beeper
 
-beeper = putbeeper()
+#
 
 #Función recoger beeper,oculta la tortuga
 def pickbeeper():
+    beeper=putbeeper()
     beeper.hideturtle()
+    return beeper
 
 wn.update()
 turtle.tracer(True)
 
 def Begining_of_Execution():
     counter = []
-    i = str()
+    tk.Label(ventana, text="Instrucciones").pack()
+    
     while True:
-        tk.Label(ventana, text="Instrucciones").pack()
+        i = input("Ingrese su codigo: ")        #digitar las instrucciones para que karel las pueda leer
         tk.Entry(ventana, justify="center", textvariable=i).pack() #Permite el ingreso de instrucciones a la función
         if i == "turnoff": #Termina el programa
             break
@@ -115,6 +120,7 @@ def Begining_of_Execution():
         elif i == "putbeeper;":
             putbeeper()
         elif i == "pickbeeper;":
+            beeper = putbeeper()
             if karel.pos() == beeper.pos():
                 pickbeeper()
                 counter += 1
@@ -123,7 +129,10 @@ def Begining_of_Execution():
     print("BYE")
 
 #Inicio de la ejecución
+    
 Begining_of_Execution()
+
+
             
 ventana.mainloop()
 turtle.mainloop()
